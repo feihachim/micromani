@@ -46,7 +46,7 @@ if (isset($_GET['id']) and $_GET['id'] > 0) :
             </tr>
             <tr>
                 <td>Quantité</td>
-                <td><?= $jeu['quantité'] . " exemplaire(s)"; ?></td>
+                <td><?= $jeu['quantite'] . " exemplaire(s)"; ?></td>
             </tr>
         </table>
         <a href="index.php">Retour à l'index</a>

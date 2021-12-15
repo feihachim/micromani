@@ -1,49 +1,66 @@
 <?php
 require('bddmicromani.php');
 
-if (isset($_POST['formedition'])) {
+if (isset($_POST['formedition']))
+{
 
     $erreur = "";
     $nom = filter_input(INPUT_POST, 'editnom', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $prix = filter_input(INPUT_POST, 'editprix', FILTER_SANITIZE_NUMBER_FLOAT);
+    $prix = filter_input(INPUT_POST, 'editprix', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
     $description = filter_input(INPUT_POST, 'editdescription', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $quantite = filter_input(INPUT_POST, 'editquantite', FILTER_SANITIZE_NUMBER_INT);
     $id = $_GET['id'];
-    if ($nom == null) {
+    if ($nom == null)
+    {
         $erreur .= "Le nom du jeu doit être défini<br>";
-    } else if ($nom == false) {
+    }
+    else if ($nom == false)
+    {
         $erreur .= "Le nom du jeu n'est pas valide<br>";
     }
-    if ($prix == null) {
+    if ($prix == null)
+    {
         $erreur .= "Le prix du jeu doit être défini<br>";
-    } else if ($prix == false) {
+    }
+    else if ($prix == false)
+    {
         $erreur .= "Le prix du jeu n'est pas valide<br>";
     }
-    if ($description == null) {
+    if ($description == null)
+    {
         $erreur .= "La description du jeu doit être définie<br>";
-    } else if ($description == false) {
+    }
+    else if ($description == false)
+    {
         $erreur .= "La description du jeu n'est pas valide<br>";
     }
-    if ($quantite == null) {
+    if ($quantite == null)
+    {
         $erreur .= "La quantité de jeux doit être définie<br>";
-    } else if ($quantite == false) {
+    }
+    else if ($quantite == false)
+    {
         $erreur .= "La quantité de jeux n'est pas valide<br>";
     }
 
-    if ($erreur == "") {
-        $editjeu = $db->prepare("UPDATE jeux_video SET nom=?, prix=?, 'description'=?, quantité=? WHERE id=?");
-        //$editjeu->bindValue(1,$nom)
+    if ($erreur == "")
+    {
+        $editjeu = $db->prepare("UPDATE jeux_video SET nom=?, prix=?, description=?, quantite=? WHERE id=?");
         $resultat = $editjeu->execute(array($nom, floatval($prix), $description, intval($quantite), $id));
-        if ($resultat) {
+        if ($resultat)
+        {
             echo "Jeu modifié";
             header('Location: index.php');
-        } else {
+        }
+        else
+        {
             echo "Erreur lors de la modification de la fiche du jeu !";
         }
     }
 }
 
-if (isset($_GET['id']) and $_GET['id'] > 0) {
+if (isset($_GET['id']) and $_GET['id'] > 0)
+{
     $reqjeu = $db->prepare("SELECT * FROM jeux_video WHERE id=:id");
     $reqjeu->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
     $reqjeu->execute();
@@ -88,10 +105,11 @@ if (isset($_GET['id']) and $_GET['id'] > 0) {
         </div>
         <div>
             <label for="editquantite">Quantité :
-                <input type="number" name="editquantite" id="editquantite" placeholder="Nombre d'exemplaires" value="<?= isset($jeu) ? $jeu['quantité'] : ''; ?>"> exemplaire(s)
+                <input type="number" name="editquantite" id="editquantite" placeholder="Nombre d'exemplaires" value="<?= isset($jeu) ? $jeu['quantite'] : ''; ?>"> exemplaire(s)
             </label>
         </div>
         <input type="submit" name="formedition" value="Editer le jeu !">
+        <a href="index.php">Retour</a>
     </form>
 </body>
 

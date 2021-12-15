@@ -1,45 +1,63 @@
 <?php
 require('bddmicromani.php');
-if (isset($_POST['formajout'])) {
+
+if (isset($_POST['formajout']))
+{
 
     $erreur = "";
     $nom = filter_input(INPUT_POST, 'newnom', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $prix = filter_input(INPUT_POST, 'newprix', FILTER_SANITIZE_NUMBER_FLOAT);
+    $prix = filter_input(INPUT_POST, 'newprix', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
     $description = filter_input(INPUT_POST, 'newdescription', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $quantite = filter_input(INPUT_POST, 'newquantite', FILTER_SANITIZE_NUMBER_INT);
-    if ($nom == null) {
+    if ($nom == null)
+    {
         $erreur .= "Le nom du jeu doit être défini<br>";
-    } else if ($nom == false) {
+    }
+    else if ($nom == false)
+    {
         $erreur .= "Le nom du jeu n'est pas valide<br>";
     }
-    if ($prix == null) {
+    if ($prix == null)
+    {
         $erreur .= "Le prix du jeu doit être défini<br>";
-    } else if ($prix == false) {
+    }
+    else if ($prix == false)
+    {
         $erreur .= "Le prix du jeu n'est pas valide<br>";
     }
-    if ($description == null) {
+    if ($description == null)
+    {
         $erreur .= "La description du jeu doit être définie<br>";
-    } else if ($description == false) {
+    }
+    else if ($description == false)
+    {
         $erreur .= "La description du jeu n'est pas valide<br>";
     }
-    if ($quantite == null) {
+    if ($quantite == null)
+    {
         $erreur .= "La quantité de jeux doit être définie<br>";
-    } else if ($quantite == false) {
+    }
+    else if ($quantite == false)
+    {
         $erreur .= "La quantité de jeux n'est pas valide<br>";
     }
 
-    if ($erreur == "") {
+    if ($erreur == "")
+    {
 
-        $insertjeu = $db->prepare("INSERT INTO jeux_video (nom,prix,description,quantité) VALUES(:nom,:prix,:description,:quantite)");
+        $insertjeu = $db->prepare("INSERT INTO jeux_video (nom,prix,description,quantite) VALUES(:nom,:prix,:description,:quantite)");
         $insertjeu->bindParam(':nom', $nom, PDO::PARAM_STR);
         $insertjeu->bindParam(':prix', $prix, PDO::PARAM_STR);
         $insertjeu->bindParam(':description', $description, PDO::PARAM_STR);
         $insertjeu->bindParam(':quantite', $quantite, PDO::PARAM_INT);
         $result = $insertjeu->execute();
-        if ($result) {
+        if ($result)
+        {
             echo "Jeu ajouté";
             header('Location: index.php');
-        } else {
+        }
+        else
+        {
             echo "Erreur lors de l'ajout du jeu";
         }
     }
@@ -85,6 +103,7 @@ if (isset($_POST['formajout'])) {
             </label>
         </div>
         <input type="submit" name="formajout" value="Ajouter le jeu !">
+        <a href="index.php">Retour</a>
     </form>
     <i>
         <?= isset($erreur) ? $erreur : ''; ?>
